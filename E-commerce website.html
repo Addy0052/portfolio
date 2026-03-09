@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Premium E‑Commerce</title>
+
+
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background: #0E0E0E;
+      color: #E8E6E3;
+    }
+
+
+    header {
+      background: #0C0C0C;
+      padding: 25px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
+    }
+
+    header h1 {
+      font-size: 28px;
+      color: #D4AF37;
+      letter-spacing: 2px;
+      font-weight: 700;
+    }
+
+    .cart {
+      cursor: pointer;
+      position: relative;
+      font-size: 20px;
+      color: #D4AF37;
+      font-weight: 600;
+    }
+
+    .cart-count {
+      position: absolute;
+      top: -10px;
+      right: -10px;
+      background: #D4AF37;
+      color: black;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+
+    .hero {
+      height: 60vh;
+      background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.8)), url('https://images.unsplash.com/photo-1542291026-7eec264c27ff');
+      background-size: cover;
+      background-position: center;
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 20px;
+    }
+
+    .hero h2 {
+      font-size: 50px;
+      font-weight: 700;
+      color: #D4AF37;
+      text-shadow: 0 0 10px black;
+    }
+
+    .hero p {
+      font-size: 18px;
+      margin-top: 15px;
+      opacity: 0.9;
+    }
+
+    .hero button {
+      margin-top: 25px;
+      padding: 12px 25px;
+      font-size: 18px;
+      border: none;
+      background: #D4AF37;
+      color: black;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .hero button:hover {
+      background: #F1D27B;
+    }
+
+
+    .products {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 25px;
+      padding: 40px;
+    }
+
+    .product {
+      background: #1A1A1A;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+      transition: 0.3s;
+    }
+
+    .product:hover {
+      transform: translateY(-8px);
+    }
+
+    .product img {
+      width: 100%;
+      border-radius: 12px;
+    }
+
+    .product h3 {
+      margin: 15px 0;
+      font-size: 20px;
+      color: #D4AF37;
+    }
+
+    .product p {
+      color: #BDBDBD;
+      font-size: 16px;
+    }
+
+    .product button {
+      width: 100%;
+      margin-top: 10px;
+      padding: 10px;
+      border: none;
+      border-radius: 6px;
+      background: #D4AF37;
+      color: black;
+      cursor: pointer;
+      font-weight: 600;
+      transition: 0.3s;
+    }
+
+    .product button:hover {
+      background: #F1D27B;
+    }
+
+
+    #cart-modal {
+      position: fixed;
+      top: 0;
+      right: -400px;
+      width: 350px;
+      height: 100%;
+      background: #111;
+      box-shadow: -2px 0 10px rgba(0, 0, 0, 0.6);
+      transition: 0.4s;
+      padding: 20px;
+      overflow-y: auto;
+      color: white;
+    }
+
+    #cart-modal.open {
+      right: 0;
+    }
+
+    #cart-modal h2 {
+      color: #D4AF37;
+    }
+
+    .cart-item {
+      border-bottom: 1px solid #333;
+      padding: 12px 0;
+    }
+
+    .cart-item p {
+      color: #E4E4E4;
+    }
+
+    .checkout {
+      margin-top: 20px;
+      padding: 12px;
+      background: #D4AF37;
+      color: black;
+      text-align: center;
+      font-weight: 700;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+
+    footer {
+      background: #0C0C0C;
+      padding: 40px;
+      text-align: center;
+      margin-top: 40px;
+      color: #D4AF37;
+    }
+
+    footer p {
+      opacity: 0.8;
+    }
+
+    .nav {
+      display: flex;
+      gap: 25px;
+    }
+
+    .nav-link {
+      color: #D4AF37;
+      text-decoration: none;
+      font-weight: 500;
+      position: relative;
+      transition: 0.3s;
+    }
+
+    .nav-link::after {
+      content: "";
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      width: 0%;
+      height: 2px;
+      background: #D4AF37;
+      transition: 0.3s;
+    }
+
+    .nav-link:hover {
+      color: #F1D27B;
+    }
+
+    .nav-link:hover::after {
+      width: 100%;
+    }
+
+
+    header {
+      animation: fadeDown 0.8s ease-out;
+    }
+
+    @keyframes fadeDown {
+      from {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <h1>Luxora Store</h1>
+    <nav class="nav">
+      <a href="#" class="nav-link">Home</a>
+      <a href="#" class="nav-link">Shop</a>
+      <a href="#" class="nav-link">About</a>
+      <a href="#" class="nav-link">Contact</a>
+    </nav>
+    <div class="cart" id="cartBtn">🛒 Cart <span class="cart-count" id="cartCount">0</span></div>
+  </header>
+
+
+  <section class="hero">
+    <div>
+      <h2>Premium Products. Premium Lifestyle.</h2>
+      <p>Exclusive luxury items curated for those with refined taste.</p>
+      <button>Shop Now</button>
+    </div>
+  </section>
+
+
+  <div class="products" id="productList"></div>
+
+
+  <div id="cart-modal">
+    <span id="closeCart" style="font-size:22px; cursor:pointer; float:right; color:#D4AF37; font-weight:700;">✖</span>
+    <h2>Your Cart</h2>
+    <div id="cart-items"></div>
+    <div class="checkout">Checkout</div>
+  </div>
+
+  <script>
+    const products = [
+      { id: 1, name: "Luxury Gold Watch", price: 299.99, image: "images/watch.webp" },
+      { id: 2, name: "Noise Cancelling Headphones", price: 149.99, image: "images/headphones.jpg" },
+      { id: 3, name: "Premium Leather Wallet", price: 89.99, image: "images/leather%20wallet.jpg" },
+      { id: 4, name: "Designer Sunglasses", price: 129.99, image: "images/sunglass.jpg" },
+      { id: 5, name: "Luxury Perfume", price: 199.99, image: "images/luxury%20perfume.jfif" },
+      { id: 6, name: "Handcrafted Bracelet", price: 59.99, image: "images/bracelet.jpg" }
+    ];
+
+    const cart = [];
+
+    function renderProducts() {
+      const list = document.getElementById("productList");
+      products.forEach(p => {
+        list.innerHTML += `
+          <div class='product'>
+            <img src='${p.image}' alt='${p.name}' />
+            <h3>${p.name}</h3>
+            <p>$${p.price}</p>
+            <button onclick="addToCart(${p.id})">Add to Cart</button>
+          </div>`;
+      });
+    }
+
+    function addToCart(id) {
+      const item = products.find(p => p.id === id);
+      cart.push(item);
+      updateCartCount();
+      renderCart();
+    }
+
+    function updateCartCount() {
+      document.getElementById("cartCount").textContent = cart.length;
+    }
+
+    function renderCart() {
+      const cartItems = document.getElementById("cart-items");
+      cartItems.innerHTML = "";
+      cart.forEach((item, index) => {
+        cartItems.innerHTML += `
+          <div class='cart-item'>
+            <p><strong>${item.name}</strong></p>
+            <p>Price: $${item.price}</p>
+            <button onclick="removeItem(${index})" style="padding:5px 10px; background:#D4AF37; color:black; border:none; border-radius:5px; cursor:pointer; margin-top:5px;">Remove</button>
+          </div>`;
+      });
+    }
+
+    function removeItem(i) {
+      cart.splice(i, 1);
+      updateCartCount();
+      renderCart();
+    }
+
+    document.getElementById("cartBtn").onclick = () => {
+      document.getElementById("cart-modal").classList.add("open");
+    };
+
+    document.getElementById("closeCart").onclick = () => {
+      document.getElementById("cart-modal").classList.remove("open");
+    };
+
+
+    renderProducts();
+  </script>
+
+  <footer>
+    <p>© 2024 Luxora Premium Store — Designed for Elegance.</p>
+  </footer>
+</body>
+
+</html>

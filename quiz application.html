@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Responsive Quiz App - Soft Blue Theme</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Poppins", sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #6fb1fc, #4364f7);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .quiz-container {
+      width: 100%;
+      max-width: 450px;
+      background: #ffffff20;
+      backdrop-filter: blur(14px);
+      padding: 25px;
+      border-radius: 20px;
+      color: #fff;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+      animation: fadeIn 0.8s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    h2 {
+      margin-bottom: 15px;
+      text-align: center;
+      font-size: 1.8rem;
+    }
+
+    #progress {
+      width: 100%;
+      height: 10px;
+      background: #ffffff40;
+      border-radius: 10px;
+      overflow: hidden;
+      margin-bottom: 20px;
+    }
+
+    #progress-bar {
+      width: 0%;
+      height: 100%;
+      background: #00e1ff;
+      transition: width 0.3s ease;
+    }
+
+    #timer {
+      text-align: right;
+      font-size: 1.1rem;
+      margin-bottom: 10px;
+      color: #dff;
+    }
+
+    .question {
+      font-size: 1.3rem;
+      margin-bottom: 20px;
+      line-height: 1.4;
+      animation: fadeIn 0.5s ease;
+    }
+
+    .options button {
+      width: 100%;
+      padding: 12px;
+      margin: 8px 0;
+      border: none;
+      border-radius: 12px;
+      background: #ffffff25;
+      color: #fff;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: 0.25s;
+    }
+
+    .options button:hover {
+      background: #ffffff45;
+    }
+
+    .btn-next {
+      width: 100%;
+      padding: 14px;
+      border: none;
+      border-radius: 12px;
+      background: #00c853;
+      color: #fff;
+      cursor: pointer;
+      margin-top: 15px;
+      font-size: 1.1rem;
+      display: none;
+      transition: .25s;
+    }
+
+    .btn-next:hover {
+      background: #00b342;
+    }
+
+    .result {
+      font-size: 1.5rem;
+      text-align: center;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="quiz-container">
+    <h2>Ultimate Quiz</h2>
+
+    <div id="progress"><div id="progress-bar"></div></div>
+    <div id="timer">Time: 15s</div>
+
+    <div class="question" id="question"></div>
+    <div class="options" id="options"></div>
+    <button class="btn-next" id="nextBtn">Next</button>
+    <div class="result" id="result"></div>
+  </div>
+
+  <script>
+    const quizData = [
+      { question: "Which language runs in a web browser?", options: ["Python","C++","JavaScript","Java"], answer: 2 },
+      { question: "What does CSS stand for?", options: ["Color Style Sheet","Cascading Style Sheets","Creative Sheet Syntax","Coding Style System"], answer: 1 },
+      { question: "What year was JavaScript created?", options: ["1995","2005","1990","2010"], answer: 0 }
+    ];
+
+    let index = 0;
+    let score = 0;
+    let timer;
+    let timeLeft = 15;
+
+    const questionEl = document.getElementById("question");
+    const optionsEl = document.getElementById("options");
+    const nextBtn = document.getElementById("nextBtn");
+    const resultEl = document.getElementById("result");
+    const timerEl = document.getElementById("timer");
+    const progressBar = document.getElementById("progress-bar");
+
+    function loadQuiz() {
+      nextBtn.style.display = "none";
+      updateProgress();
+      resetTimer();
+      startTimer();
+
+      const q = quizData[index];
+      questionEl.textContent = q.question;
+      optionsEl.innerHTML = "";
+
+      q.options.forEach((opt, i) => {
+        const btn = document.createElement("button");
+        btn.textContent = opt;
+        btn.onclick = () => selectOption(i);
+        optionsEl.appendChild(btn);
+      });
+    }
+
+    function updateProgress() {
+      progressBar.style.width = ((index) / quizData.length) * 100 + "%";
+    }
+
+    function resetTimer() {
+      clearInterval(timer);
+      timeLeft = 15;
+      timerEl.textContent = `Time: ${timeLeft}s`;
+    }
+
+    function startTimer() {
+      timer = setInterval(() => {
+        timeLeft--;
+        timerEl.textContent = `Time: ${timeLeft}s`;
+
+        if (timeLeft <= 0) {
+          clearInterval(timer);
+          selectOption(-1);
+        }
+      }, 1000);
+    }
+
+    function selectOption(selected) {
+      clearInterval(timer);
+      const correct = quizData[index].answer;
+      const buttons = optionsEl.querySelectorAll("button");
+
+      buttons.forEach((btn, i) => {
+        btn.disabled = true;
+        if (i === correct) btn.style.background = "#00e676";
+        if (i === selected && selected !== correct) btn.style.background = "#ff5252";
+      });
+
+      if (selected === correct) score++;
+      nextBtn.style.display = "block";
+    }
+
+    nextBtn.onclick = () => {
+      index++;
+      if (index < quizData.length) {
+        loadQuiz();
+      } else {
+        showResult();
+      }
+    };
+
+    function showResult() {
+      questionEl.style.display = "none";
+      optionsEl.style.display = "none";
+      nextBtn.style.display = "none";
+      progressBar.style.width = "100%";
+      resultEl.textContent = `Your Score: ${score} / ${quizData.length}`;
+      timerEl.style.display = "none";
+    }
+
+    loadQuiz();
+  </script>
+</body>
+</html>

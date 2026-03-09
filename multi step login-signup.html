@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Multi-Step Auth UI</title>
+
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Poppins", sans-serif;
+    }
+
+    body {
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: linear-gradient(135deg, #6a11cb, #2575fc);
+        padding: 20px;
+    }
+
+    .container {
+        width: 100%;
+        max-width: 420px;
+        background: rgba(255,255,255,0.12);
+        backdrop-filter: blur(12px);
+        padding: 30px;
+        border-radius: 20px;
+        box-shadow: 0 0 25px rgba(0,0,0,0.2);
+        animation: fadeIn 0.6s ease;
+        color: #fff;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    h2 {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .input-group {
+        margin-bottom: 15px;
+    }
+
+    input {
+        width: 100%;
+        padding: 12px;
+        border: none;
+        outline: none;
+        border-radius: 10px;
+        background: rgba(255,255,255,0.2);
+        color: #fff;
+        font-size: 15px;
+    }
+
+    input::placeholder {
+        color: #ddd;
+    }
+
+    button {
+        width: 100%;
+        padding: 12px;
+        border: none;
+        border-radius: 10px;
+        background: #fff;
+        color: #000;
+        font-size: 16px;
+        cursor: pointer;
+        margin-top: 10px;
+        transition: 0.3s;
+    }
+
+    button:hover {
+        background: #eee;
+    }
+
+    .link {
+        text-align: center;
+        margin-top: 15px;
+        cursor: pointer;
+        color: #fff;
+        text-decoration: underline;
+    }
+
+    .step {
+        display: none;
+        animation: slide 0.5s ease;
+    }
+
+    @keyframes slide {
+        from { opacity: 0; transform: translateX(30px); }
+        to { opacity: 1; transform: translateX(0); }
+    }
+
+    .active {
+        display: block;
+    }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+    <!-- LOGIN SECTION -->
+    <div id="login" class="step active">
+        <h2>Login</h2>
+
+        <div class="input-group">
+            <input type="email" placeholder="Email">
+        </div>
+
+        <div class="input-group">
+            <input type="password" placeholder="Password">
+        </div>
+
+        <button>Login</button>
+
+        <p class="link" onclick="showSignup()">Create account</p>
+    </div>
+
+    <!-- SIGNUP STEP 1 -->
+    <div id="step1" class="step">
+        <h2>Signup - Step 1</h2>
+
+        <div class="input-group">
+            <input type="text" id="name" placeholder="Full Name">
+        </div>
+
+        <button onclick="nextStep(1)">Next</button>
+
+        <p class="link" onclick="showLogin()">Already have an account?</p>
+    </div>
+
+    <!-- SIGNUP STEP 2 -->
+    <div id="step2" class="step">
+        <h2>Signup - Step 2</h2>
+
+        <div class="input-group">
+            <input type="email" id="email" placeholder="Email">
+        </div>
+
+        <button onclick="nextStep(2)">Next</button>
+    </div>
+
+    <!-- SIGNUP STEP 3 -->
+    <div id="step3" class="step">
+        <h2>Signup - Step 3</h2>
+
+        <div class="input-group">
+            <input type="password" id="password" placeholder="Password">
+        </div>
+
+        <button onclick="finishSignup()">Finish</button>
+    </div>
+
+    <!-- SUCCESS MESSAGE -->
+    <div id="success" class="step">
+        <h2>Success 🎉</h2>
+        <p>Your account has been created!</p>
+        <button onclick="showLogin()">Login Now</button>
+    </div>
+
+</div>
+
+<script>
+
+function showSignup() {
+    hideAll();
+    document.getElementById("step1").classList.add("active");
+}
+
+function showLogin() {
+    hideAll();
+    document.getElementById("login").classList.add("active");
+}
+
+function hideAll() {
+    document.querySelectorAll(".step").forEach(s => s.classList.remove("active"));
+}
+
+function nextStep(step) {
+    if (step === 1) {
+        let name = document.getElementById("name").value.trim();
+        if (name === "") return alert("Enter your name!");
+        hideAll();
+        document.getElementById("step2").classList.add("active");
+    }
+
+    if (step === 2) {
+        let email = document.getElementById("email").value.trim();
+        if (email === "") return alert("Enter your email!");
+        hideAll();
+        document.getElementById("step3").classList.add("active");
+    }
+}
+
+function finishSignup() {
+    let pass = document.getElementById("password").value.trim();
+    if (pass === "") return alert("Enter password!");
+
+    hideAll();
+    document.getElementById("success").classList.add("active");
+}
+
+</script>
+
+</body>
+</html>

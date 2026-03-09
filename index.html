@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aditya | Portfolio</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;600;700&display=swap" rel="stylesheet">
+<script src="https://kit.fontawesome.com/a2d9d5a64a.js" crossorigin="anonymous"></script>
+
+<style>
+
+html{scroll-behavior:smooth;}
+
+:root{
+--bg:#05060f;
+--card:#11182b;
+--text:#e5eaff;
+--accent:#9100ff;
+--accent-light:#00d4ff;
+--radius:14px;
+--shadow-glow:0 0 20px #7a00ff,0 0 40px #00d4ff;
+}
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:"Poppins",sans-serif;
+}
+
+body{
+background:var(--bg);
+color:var(--text);
+overflow-x:hidden;
+}
+
+canvas{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+z-index:-1;
+}
+
+
+
+nav{
+width:100%;
+padding:18px 40px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+position:fixed;
+top:0;
+background:rgba(10,15,30,0.6);
+backdrop-filter:blur(12px);
+border-bottom:1px solid rgba(255,255,255,0.08);
+z-index:1000;
+}
+
+.logo{
+font-size:26px;
+font-weight:600;
+color:var(--accent-light);
+text-shadow:var(--shadow-glow);
+}
+
+nav ul{
+display:flex;
+list-style:none;
+gap:25px;
+}
+
+nav ul li a{
+text-decoration:none;
+color:var(--text);
+padding:8px 16px;
+border-radius:var(--radius);
+transition:.3s;
+}
+
+nav ul li a:hover{
+background:rgba(255,255,255,0.08);
+box-shadow:var(--shadow-glow);
+}
+
+
+
+section{
+padding:140px 40px 80px;
+min-height:100vh;
+}
+
+
+
+.home-container{
+display:flex;
+flex-wrap:wrap;
+align-items:center;
+gap:50px;
+}
+
+.profile-box{
+width:260px;
+height:260px;
+border-radius:50%;
+border:6px solid transparent;
+background:linear-gradient(45deg,var(--accent),var(--accent-light));
+padding:6px;
+box-shadow:var(--shadow-glow);
+}
+
+.profile-box img{
+width:100%;
+height:100%;
+object-fit:cover;
+border-radius:50%;
+}
+
+h1{
+font-size:54px;
+text-shadow:var(--shadow-glow);
+}
+
+.typed{
+font-size:24px;
+margin:15px 0;
+}
+
+.btn{
+padding:12px 22px;
+border:none;
+border-radius:var(--radius);
+background:linear-gradient(45deg,var(--accent),var(--accent-light));
+color:white;
+cursor:pointer;
+}
+
+.home-buttons{
+margin-top:20px;
+display:flex;
+gap:15px;
+}
+
+
+
+.social-row{
+display:flex;
+gap:15px;
+margin-top:20px;
+}
+
+.social-row i{
+font-size:26px;
+cursor:pointer;
+}
+
+.social-row i:hover{
+color:var(--accent-light);
+text-shadow:var(--shadow-glow);
+}
+
+
+
+.projects-grid{
+margin-top:40px;
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+gap:30px;
+}
+
+.project-card{
+background:var(--card);
+padding:18px;
+border-radius:var(--radius);
+border:1px solid rgba(255,255,255,0.1);
+transition:.3s;
+}
+
+.project-card:hover{
+transform:translateY(-8px);
+box-shadow:var(--shadow-glow);
+}
+
+.project-card img{
+width:100%;
+border-radius:var(--radius);
+margin-bottom:10px;
+}
+
+.badges{
+display:flex;
+gap:8px;
+flex-wrap:wrap;
+margin:10px 0;
+}
+
+.badge{
+background:rgba(255,255,255,0.1);
+padding:5px 12px;
+border-radius:20px;
+font-size:13px;
+}
+
+.card-btns{
+display:flex;
+gap:10px;
+margin-top:10px;
+}
+
+.btn-small{
+padding:8px 14px;
+border:none;
+border-radius:var(--radius);
+background:linear-gradient(45deg,var(--accent),var(--accent-light));
+color:white;
+cursor:pointer;
+}
+
+
+
+.contact-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+gap:25px;
+margin:40px 0;
+}
+
+.contact-card{
+background:var(--card);
+padding:25px;
+border-radius:var(--radius);
+text-align:center;
+}
+
+</style>
+</head>
+
+<body>
+
+<canvas id="particle"></canvas>
+
+<nav>
+
+<div class="logo">My Portfolio</div>
+
+<ul>
+<li><a href="#home">Home</a></li>
+<li><a href="#projects">Projects</a></li>
+<li><a href="#mini">Mini Projects</a></li>
+<li><a href="#contact">Contact</a></li>
+</ul>
+
+</nav>
+
+
+
+<section id="home">
+
+<div class="home-container">
+
+<div class="profile-box">
+<img src="images/profile.jfif">
+</div>
+
+<div>
+
+<h1>Aditya</h1>
+
+<div class="typed"></div>
+
+<p style="max-width:600px">
+I build premium quality websites, futuristic UI,
+modern animations and intelligent user experiences.
+</p>
+
+<div class="home-buttons">
+
+<a href="files/resume.pdf" download>
+<button class="btn">Download Resume</button>
+</a>
+
+<button class="btn">Hire Me</button>
+
+</div>
+
+<div class="social-row">
+<a href="#"><i class="fab fa-github"></i></a>
+<a href="#"><i class="fab fa-linkedin"></i></a>
+<a href="#"><i class="fab fa-twitter"></i></a>
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+
+
+<section id="projects">
+
+<h1 style="color:var(--accent-light)">Projects</h1>
+
+<div class="projects-grid">
+
+<div class="project-card">
+<img src="images/project1.jpg">
+<h2>Educational Institute</h2>
+<p></p>
+
+<div class="card-btns">
+<a href="educational institute website.html" target="_blank">
+<button class="btn-small">Live</button>
+</a>
+<a href="#"><button class="btn-small">Code</button></a>
+</div>
+
+</div>
+
+<div class="project-card">
+<img src="images/project2.jpg">
+<h2>Gaming</h2>
+<p></p>
+
+<div class="card-btns">
+<a href="gaming website.html" target="_blank">
+<button class="btn-small">Live</button>
+</a>
+<a href="#"><button class="btn-small">Code</button></a>
+</div>
+
+</div>
+
+<div class="project-card">
+<img src="images/project3.jpg">
+<h2>OTT Clone</h2>
+
+<div class="card-btns">
+<a href="netflix clone.html" target="_blank">
+<button class="btn-small">Live</button>
+</a>
+<a href="#"><button class="btn-small">Code</button></a>
+</div>
+
+</div>
+
+<div class="project-card">
+<img src="images/project4.jpg">
+<h2>E-Commerce</h2>
+
+<div class="card-btns">
+<a href="E-commerce website.html" target="_blank">
+<button class="btn-small">Live</button>
+</a>
+<a href="#"><button class="btn-small">Code</button></a>
+</div>
+
+</div>
+
+<div class="project-card">
+<img src="images/project5.jpg">
+<h2>KIds School</h2>
+
+<div class="card-btns">
+<a href="school website.html" target="_blank">
+<button class="btn-small">Live</button>
+</a>
+<a href="#"><button class="btn-small">Code</button></a>
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+
+
+<section id="mini">
+
+<h1 style="color:var(--accent-light)">Mini Projects</h1>
+
+<div class="projects-grid">
+
+<div class="project-card">
+
+<img src="images/m1.jpg">
+
+<h3>calculator</h3>
+
+<div class="card-btns">
+
+<a href="calculator.html" target="_blank">
+<button class="btn-small">Live</button>
+</a>
+</div>
+</div>
+
+<div class="project-card">
+
+<img src="images/m1.jpg">
+
+<h3>todo app</h3>
+
+<div class="card-btns">
+
+<a href="to do list.html" target="_blank">
+<button class="btn-small">Live</button>
+</a>
+</div>
+</div>
+
+<div class="project-card">
+
+<img src="images/m1.jpg">
+
+<h3>weather app</h3>
+
+<div class="card-btns">
+
+<a href="weather application.html" target="_blank">
+<button class="btn-small">Live</button>
+</a>
+</div>
+</div>
+
+<div class="project-card">
+
+<img src="images/m1.jpg">
+
+<h3>quiz app</h3>
+
+<div class="card-btns">
+
+<a href="quiz application.html" target="_blank">
+<button class="btn-small">Live</button>
+</a>
+</div>
+</div>
+
+<div class="project-card">
+
+<img src="images/m1.jpg">
+
+<h3>countdown timer</h3>
+
+<div class="card-btns">
+
+<a href="countdown timer.html" target="_blank">
+<button class="btn-small">Live</button>
+</a>
+</div>
+</div>
+
+<div class="project-card">
+
+<img src="images/m1.jpg">
+
+<h3>image gallery</h3>
+
+<div class="card-btns">
+
+<a href="image gallery.html" target="_blank">
+<button class="btn-small">Live</button>
+</a>
+</div>
+</div>
+
+<div class="project-card">
+
+<img src="images/m1.jpg">
+
+<h3>dark-light mode</h3>
+
+<div class="card-btns">
+
+<a href="dark-light mode.html" target="_blank">
+<button class="btn-small">Live</button>
+</a>
+</div>
+</div>
+
+<div class="project-card">
+
+<img src="images/m1.jpg">
+
+<h3>multi step login-signup</h3>
+
+<div class="card-btns">
+
+<a href="multi step login-signup.html" target="_blank">
+<button class="btn-small">Live</button>
+</a>
+</div>
+</div>
+
+</div>
+
+</section>
+
+
+
+<section id="contact">
+
+<h1 style="color:var(--accent-light)">Contact</h1>
+
+<div class="contact-grid">
+
+<div class="contact-card">
+<h2>Email</h2>
+<p>yourmail@gmail.com</p>
+</div>
+
+<div class="contact-card">
+<h2>Phone</h2>
+<p>+00 123 456 789</p>
+</div>
+
+<div class="contact-card">
+<h2>Location</h2>
+<p>Your City</p>
+</div>
+
+</div>
+<footer>
+
+<div class="footer-container">
+
+<div class="footer-about">
+<h2>Aditya</h2>
+<p>
+Frontend Developer passionate about building modern,
+interactive and user-friendly websites.
+</p>
+</div>
+
+<div class="footer-links">
+<h3>Quick Links</h3>
+<ul>
+<li><a href="#home">Home</a></li>
+<li><a href="#projects">Projects</a></li>
+<li><a href="#mini">Mini Projects</a></li>
+<li><a href="#contact">Contact</a></li>
+</ul>
+</div>
+
+<div class="footer-social">
+<h3>Follow Me</h3>
+
+<div class="social-icons">
+<a href="#"><i class="fab fa-github"></i></a>
+<a href="#"><i class="fab fa-linkedin"></i></a>
+<a href="#"><i class="fab fa-twitter"></i></a>
+<a href="#"><i class="fab fa-instagram"></i></a>
+</div>
+
+</div>
+
+</div>
+
+<div class="footer-bottom">
+<p>© 2026 Aditya | All Rights Reserved</p>
+</div>
+
+</footer>
+
+</section>
+
+<script>
+
+const words=["Web Developer","UI/UX Designer","Frontend Engineer","Creative Coder"]
+
+let i=0
+let j=0
+
+function typeEffect(){
+
+let text=words[i].slice(0,j+1)
+
+document.querySelector(".typed").innerHTML="I am a <span style='color:#00d4ff'>"+text+"</span>"
+
+j++
+
+if(j===words[i].length){
+
+setTimeout(()=>{
+j=0
+i=(i+1)%words.length
+typeEffect()
+},1000)
+
+}else{
+setTimeout(typeEffect,100)
+}
+
+}
+
+typeEffect()
+
+</script>
+
+</body>
+</html>

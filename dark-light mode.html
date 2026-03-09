@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Dark / Light Mode</title>
+
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Poppins", sans-serif;
+        transition: background 0.4s ease, color 0.4s ease;
+    }
+
+    body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        padding: 20px;
+        background: var(--bg);
+        color: var(--text);
+    }
+
+    /* THEME VARIABLES */
+    :root {
+        --bg: #f2f2f2;
+        --text: #111;
+        --card-bg: rgba(255,255,255,0.5);
+        --glow: rgba(0, 0, 0, 0.1);
+    }
+
+    body.dark {
+        --bg: #0e0e0e;
+        --text: #ffffff;
+        --card-bg: rgba(255, 255, 255, 0.08);
+        --glow: rgba(0, 255, 255, 0.15);
+    }
+
+    .container {
+        padding: 30px;
+        max-width: 500px;
+        width: 100%;
+        background: var(--card-bg);
+        border-radius: 20px;
+        box-shadow: 0 0 25px var(--glow);
+        backdrop-filter: blur(12px);
+        text-align: center;
+        animation: fadeIn 0.8s ease;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to   { opacity: 1; transform: translateY(0); }
+    }
+
+    h1 {
+        margin-bottom: 15px;
+        font-size: 28px;
+    }
+
+    p {
+        margin-bottom: 20px;
+        opacity: 0.8;
+    }
+
+    /* Toggle Switch */
+    .toggle-btn {
+        width: 70px;
+        height: 35px;
+        background: var(--card-bg);
+        border-radius: 50px;
+        position: relative;
+        cursor: pointer;
+        box-shadow: inset 0 0 10px var(--glow);
+    }
+
+    .circle {
+        width: 28px;
+        height: 28px;
+        background: var(--text);
+        border-radius: 50%;
+        position: absolute;
+        top: 50%;
+        left: 4px;
+        transform: translateY(-50%);
+        transition: 0.4s ease;
+    }
+
+    body.dark .circle {
+        left: calc(100% - 32px);
+        background: #ffe066;
+        box-shadow: 0 0 15px #ffe066;
+    }
+
+    @media (max-width: 600px) {
+        h1 { font-size: 24px; }
+    }
+</style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Dark / Light Mode</h1>
+    <p>Toggle the button below to switch themes.</p>
+
+    <div class="toggle-btn" onclick="toggleTheme()">
+        <div class="circle"></div>
+    </div>
+</div>
+
+<script>
+    // Load saved theme
+    if (localStorage.getItem("theme") === "dark") {
+        document.body.classList.add("dark");
+    }
+
+    function toggleTheme() {
+        document.body.classList.toggle("dark");
+
+        // Save preference
+        if (document.body.classList.contains("dark")) {
+            localStorage.setItem("theme", "dark");
+        } else {
+            localStorage.setItem("theme", "light");
+        }
+    }
+</script>
+
+</body>
+</html>

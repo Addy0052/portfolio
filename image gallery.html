@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fast Responsive Image Gallery</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Poppins", sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #3a7bd5, #3a6073);
+            min-height: 100vh;
+        }
+
+        /* NAVBAR */
+        .navbar {
+            position: sticky;
+            top: 0;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255,255,255,0.15);
+            backdrop-filter: blur(12px);
+        }
+
+        .logo {
+            font-size: 22px;
+            color: white;
+            font-weight: bold;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 20px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+            transition: .3s;
+        }
+
+        .nav-links a:hover {
+            color: #d6e9ff;
+        }
+
+        /* BURGER MENU */
+        .burger {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+        }
+        .burger div {
+            width: 28px;
+            height: 3px;
+            background: white;
+        }
+
+        /* GALLERY */
+        .gallery {
+            margin: 40px auto;
+            max-width: 1200px;
+            display: grid;
+            gap: 15px;
+            padding: 10px;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        }
+
+        .gallery-item {
+            overflow: hidden;
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+            transition: .4s ease;
+        }
+
+        .gallery-item:hover {
+            transform: scale(1.07);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: .5s ease;
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.2);
+        }
+
+        /* MOBILE */
+        @media(max-width: 768px) {
+            .burger {
+                display: flex;
+            }
+            .nav-links {
+                flex-direction: column;
+                position: absolute;
+                top: 65px;
+                right: -100%;
+                width: 200px;
+                background: rgba(255,255,255,0.2);
+                backdrop-filter: blur(10px);
+                padding: 20px;
+                border-radius: 10px;
+                transition: .4s;
+            }
+            .nav-links.active {
+                right: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="navbar">
+        <div class="logo">IMAGE GALLERY</div>
+
+        <ul class="nav-links" id="navLinks">
+            <li><a href="#">Home</a></li>
+            <li><a href="#">Gallery</a></li>
+            <li><a href="#">Photos</a></li>
+            <li><a href="#">Contact</a></li>
+        </ul>
+
+        <div class="burger" id="burger">
+            <div></div><div></div><div></div>
+        </div>
+    </nav>
+
+    <section class="gallery" id="gallery"></section>
+
+<script>
+    // BURGER MENU
+    const burger = document.getElementById("burger");
+    const navLinks = document.getElementById("navLinks");
+    burger.onclick = () => navLinks.classList.toggle("active");
+
+    // FAST IMAGE LIST (Compressed thumbnails)
+    const images = [
+        "https://images.pexels.com/photos/414171/pexels-photo-414171.jpeg?auto=compress&w=600",
+        "https://images.pexels.com/photos/34950/pexels-photo.jpg?auto=compress&w=600",
+        "https://images.pexels.com/photos/210186/pexels-photo-210186.jpeg?auto=compress&w=600",
+        "https://images.pexels.com/photos/417173/pexels-photo-417173.jpeg?auto=compress&w=600",
+        "https://images.pexels.com/photos/459225/pexels-photo-459225.jpeg?auto=compress&w=600",
+        "https://images.pexels.com/photos/414612/pexels-photo-414612.jpeg?auto=compress&w=600",
+        "https://images.pexels.com/photos/35537/child-children-girl-happy.jpg?auto=compress&w=600",
+        "https://images.pexels.com/photos/1103970/pexels-photo-1103970.jpeg?auto=compress&w=600",
+        "https://images.pexels.com/photos/572897/pexels-photo-572897.jpeg?auto=compress&w=600",
+        "https://images.pexels.com/photos/462118/pexels-photo-462118.jpeg?auto=compress&w=600",
+        "https://images.pexels.com/photos/91227/pexels-photo-91227.jpeg?auto=compress&w=600",
+        "https://images.pexels.com/photos/248797/pexels-photo-248797.jpeg?auto=compress&w=600",
+        "https://images.pexels.com/photos/301599/pexels-photo-301599.jpeg?auto=compress&w=600",
+        "https://images.pexels.com/photos/3244513/pexels-photo-3244513.jpeg?auto=compress&w=600",
+        "https://images.pexels.com/photos/414660/pexels-photo-414660.jpeg?auto=compress&w=600",
+        "https://images.pexels.com/photos/127028/pexels-photo-127028.jpeg?auto=compress&w=600",
+        "https://images.pexels.com/photos/3408744/pexels-photo-3408744.jpeg?auto=compress&w=600",
+        "https://images.pexels.com/photos/617278/pexels-photo-617278.jpeg?auto=compress&w=600",
+    ];
+
+    const gallery = document.getElementById("gallery");
+
+    images.forEach(src => {
+        const div = document.createElement("div");
+        div.className = "gallery-item";
+
+        const img = document.createElement("img");
+        img.src = src;
+
+        div.appendChild(img);
+        gallery.appendChild(div);
+    });
+</script>
+
+</body>
+</html>

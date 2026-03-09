@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neon Gaming Portal</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #04040a;
+            font-family: 'Poppins', sans-serif;
+            color: #dff8ff;
+            overflow-x: hidden;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        #preloader {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            background: #02030a;
+            top: 0;
+            left: 0;
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .loader {
+            width: 70px;
+            height: 70px;
+            border: 4px solid #00eaff;
+            border-top: 4px solid transparent;
+            border-radius: 50%;
+            animation: spin 1s linear infinite, glow 1.5s infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes glow {
+            0% {
+                box-shadow: 0 0 5px #00eaff;
+            }
+
+            100% {
+                box-shadow: 0 0 20px #00eaff;
+            }
+        }
+
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 18px 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #02040aee;
+            border-bottom: 1px solid #00eaff55;
+            z-index: 10000;
+            transition: .3s;
+        }
+
+        .menu-btn {
+            display: none;
+            font-size: 32px;
+            cursor: pointer;
+            color: #00eaff;
+            position: absolute;
+            right: 40px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        nav.scrolled {
+            padding: 10px 50px;
+            background: #04081c;
+            box-shadow: 0 0 20px #00eaff;
+        }
+
+        .logo {
+            color: #00eaff;
+            font-size: 28px;
+            font-weight: 700;
+            text-shadow: 0 0 12px #00eaff;
+        }
+
+        nav ul {
+            display: flex;
+            gap: 35px;
+            list-style: none;
+        }
+
+        nav ul li a {
+            color: #dff8ff;
+            font-size: 16px;
+            transition: .25s;
+        }
+
+        nav ul li a:hover,
+        nav ul li a.active {
+            color: #00eaff;
+            text-shadow: 0 0 10px #00eaff;
+        }
+
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            padding-left: 60px;
+            background: url('images/gta%20V.jpg') center/cover;
+            position: relative;
+        }
+
+        .hero::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000314aa;
+            z-index: 1;
+        }
+
+        .hero-text {
+            position: relative;
+            z-index: 2;
+            max-width: 500px;
+        }
+
+        .hero-text h1 {
+            font-size: 60px;
+            color: #00eaff;
+            text-shadow: 0 0 25px #00eaff;
+        }
+
+        .typing {
+            border-right: 3px solid #00eaff;
+            animation: blink .7s infinite;
+        }
+
+        @keyframes blink {
+            50% {
+                border-color: transparent;
+            }
+        }
+
+        .hero-text p {
+            margin: 15px 0 25px;
+            color: #bdefff;
+        }
+
+        .hero-btn {
+            padding: 12px 26px;
+            font-weight: bold;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            background: linear-gradient(90deg, #00eaff, #008cff);
+            color: #000;
+            box-shadow: 0 0 15px #00eaff;
+            transition: .3s;
+        }
+
+        .hero-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 25px #00eaff;
+        }
+
+        .games h2 {
+            text-align: center;
+            margin-top: 80px;
+            color: #00eaff;
+            text-shadow: 0 0 12px #00eaff;
+        }
+
+        .game-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 30px;
+            padding: 40px 60px;
+        }
+
+        .game-card {
+            background: #07101d;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid #00eaff33;
+            box-shadow: 0 0 10px #00eaff33;
+            transition: .3s;
+            transform-style: preserve-3d;
+        }
+
+        .game-card:hover {
+            transform: scale(1.05) rotateY(7deg);
+            box-shadow: 0 0 25px #00eaff;
+        }
+
+        .game-card img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+        }
+
+        .game-card h3 {
+            padding: 15px;
+            color: #00eaff;
+            text-shadow: 0 0 10px #00eaff;
+        }
+
+        .game-card p {
+            padding: 0 15px 15px;
+        }
+
+        #news {
+            padding: 60px;
+        }
+
+        #news h2 {
+            text-align: center;
+            color: #00eaff;
+            text-shadow: 0 0 12px #00eaff;
+        }
+
+        .news-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 35px;
+        }
+
+        .news-card {
+            background: #07101d;
+            border-radius: 10px;
+            border: 1px solid #00eaff33;
+            overflow: hidden;
+            transition: .3s;
+            opacity: 0;
+            transform: translateY(40px);
+        }
+
+        .news-card.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .news-card:hover {
+            transform: scale(1.03);
+            box-shadow: 0 0 20px #00eaff;
+        }
+
+        .news-card img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+        }
+
+        .news-card h3 {
+            padding: 15px;
+            color: #00eaff;
+        }
+
+        .news-card p {
+            padding: 0 15px 20px;
+            color: #c8f6ff;
+        }
+
+        #topBtn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: #00eaff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 22px;
+            cursor: pointer;
+            color: #000;
+            box-shadow: 0 0 20px #00eaff;
+            display: none;
+            z-index: 999;
+        }
+
+        .cursor-dot {
+            position: fixed;
+            width: 8px;
+            height: 8px;
+            background: #00eaff;
+            border-radius: 50%;
+            pointer-events: none;
+            box-shadow: 0 0 10px #00eaff;
+            animation: fadeOut .5s forwards;
+        }
+
+        @keyframes fadeOut {
+            100% {
+                opacity: 0;
+                transform: scale(0);
+            }
+        }
+
+        @media(max-width:768px) {
+            nav {
+                padding: 15px 20px;
+            }
+
+            .menu-btn {
+                display: block;
+                right: 25px;
+                top: 50%;
+                transform: translateY(-50%);
+            }
+
+            nav ul {
+                position: absolute;
+                top: 70px;
+                right: -300px;
+                background: #01030c;
+                flex-direction: column;
+                width: 230px;
+                padding: 25px;
+                gap: 20px;
+                transition: .3s;
+                border-left: 1px solid #00eaff;
+            }
+        }
+
+        /* FOOTER */
+        footer {
+            background: #020310;
+            padding: 50px 20px;
+            text-align: center;
+            margin-top: 60px;
+            border-top: 1px solid #00eaff55;
+            box-shadow: 0 0 20px #00eaff33 inset;
+        }
+
+        footer h2 {
+            color: #00eaff;
+            font-weight: 700;
+            margin-bottom: 12px;
+            text-shadow: 0 0 15px #00eaff;
+        }
+
+        footer p {
+            color: #c9f8ff;
+            margin: 8px 0;
+        }
+
+        .footer-links {
+            margin: 18px 0;
+        }
+
+        .footer-links a {
+            color: #dff8ff;
+            margin: 0 12px;
+            transition: .3s;
+        }
+
+        .footer-links a:hover {
+            color: #00eaff;
+            text-shadow: 0 0 8px #00eaff;
+        }
+
+        footer .copyright {
+            margin-top: 15px;
+            font-size: 14px;
+            opacity: 0.8;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="preloader">
+        <div class="loader"></div>
+    </div>
+
+    <nav>
+        <div class="logo">xoxo Gaming</div>
+        <div class="menu-btn" onclick="toggleMenu()">☰</div>
+        <ul id="navMenu">
+            <li><a href="#home" class="active">Home</a></li>
+            <li><a href="#games">Games</a></li>
+            <li><a href="#news">News</a></li>
+        </ul>
+    </nav>
+
+    <section class="hero" id="home">
+        <div class="hero-text">
+            <h1><span id="typing"></span></h1>
+            <p>Experience next-gen games, tournaments and a neon-powered universe.</p>
+            <button class="hero-btn beep">Explore Games</button>
+        </div>
+    </section>
+
+    <section id="games" class="games">
+        <h2>Trending Games</h2>
+        <div class="game-grid" id="gameContainer"></div>
+    </section>
+
+    <section id="news">
+        <h2>Gaming News</h2>
+        <div class="news-grid">
+            <div class="news-card">
+                <img src="https://wallpapercave.com/wp/wp9163344.jpg">
+                <h3>New Cyber Arena Update</h3>
+                <p>Massive DLC drops with new weapons, maps, and neon boss fights.</p>
+            </div>
+
+            <div class="news-card">
+                <img src="https://wallpapercave.com/wp/wp9760870.jpg">
+                <h3>Esports Tournament</h3>
+                <p>$250,000 prize pool — registrations open tomorrow.</p>
+            </div>
+
+            <div class="news-card">
+                <img src="images/neon%20drft%20S2.jpeg">
+                <h3>Neon Drift Season 2</h3>
+                <p>New cars, neon turbo boost and multiplayer racing added.</p>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-content">
+            <h2>xoxo Gaming</h2>
+            <p>Your neon gateway to the future of gaming.</p>
+
+            <div class="footer-links">
+                <a href="#home">Home</a>
+                <a href="#games">Games</a>
+                <a href="#news">News</a>
+            </div>
+
+            <p class="copyright">© 2024 xoxo Gaming. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <div id="topBtn">↑</div>
+
+    <script>
+        window.onload = () => {
+            setTimeout(() => {
+                document.getElementById("preloader").style.opacity = "0";
+                setTimeout(() => {
+                    document.getElementById("preloader").remove();
+                }, 500);
+            }, 800);
+        };
+
+        function toggleMenu() {
+            document.getElementById("navMenu").classList.toggle("active");
+        }
+
+        window.addEventListener("scroll", () => {
+            let sections = document.querySelectorAll("section");
+            let links = document.querySelectorAll("nav ul li a");
+
+            sections.forEach(sec => {
+                let top = window.scrollY;
+                let offset = sec.offsetTop - 150;
+                let height = sec.offsetHeight;
+                let id = sec.getAttribute("id");
+
+                if (top >= offset && top < offset + height) {
+                    links.forEach(a => a.classList.remove("active"));
+                    document.querySelector(`nav ul li a[href="#${id}"]`)
+                        ?.classList.add("active");
+                }
+            });
+        });
+
+        let text = "Welcome to the Future of Gaming";
+        let idx = 0;
+
+        function typeEffect() {
+            document.getElementById("typing").innerHTML = text.slice(0, idx) + "<span class='typing'></span>";
+            if (idx < text.length) { idx++; setTimeout(typeEffect, 80); }
+        }
+        typeEffect();
+
+        const games = [
+            { title: "Cyber Strike", img: "images/cyber%20strike.webp", desc: "Fast-paced neon cyberpunk shooter." },
+            { title: "Shadow Hunter", img: "images/shadowhunters.jpg", desc: "Hunt enemies in a futuristic world." },
+            { title: "Neon Drift", img: "images/neon%20drift.jpg", desc: "Race through glowing neon highways." },
+            { title: "Dark Fortress", img: "images/dark%20fortress.jpg", desc: "Defend your base from shadow creatures." },
+        ];
+
+        let container = document.getElementById("gameContainer");
+        games.forEach(game => {
+            container.innerHTML += `
+    <div class="game-card beep">
+      <img src="${game.img}">
+      <h3>${game.title}</h3>
+      <p>${game.desc}</p>
+    </div>`;
+        });
+
+        const newsCards = document.querySelectorAll(".news-card");
+        const reveal = () => {
+            newsCards.forEach(card => {
+                let rect = card.getBoundingClientRect().top;
+                if (rect < window.innerHeight - 100) { card.classList.add("show"); }
+            });
+        };
+        window.addEventListener("scroll", reveal);
+        reveal();
+
+        document.addEventListener("mousemove", (e) => {
+            const dot = document.createElement("div");
+            dot.className = "cursor-dot";
+            dot.style.left = e.pageX + "px";
+            dot.style.top = e.pageY + "px";
+            document.body.appendChild(dot);
+            setTimeout(() => dot.remove(), 400);
+        });
+
+        const topBtn = document.getElementById("topBtn");
+        window.addEventListener("scroll", () => {
+            if (window.scrollY > 400) { topBtn.style.display = "flex"; }
+            else { topBtn.style.display = "none"; }
+        });
+        topBtn.onclick = () => window.scrollTo({ top: 0, behavior: "smooth" });
+
+        const zapSound = new Audio("https://cdn.pixabay.com/audio/2022/03/15/audio_287bf4a5c8.mp3");
+        zapSound.volume = 0.4;
+
+        document.querySelectorAll(".beep").forEach(btn => {
+            btn.addEventListener("mouseenter", () => zapSound.play());
+            btn.addEventListener("click", () => zapSound.play());
+        });
+    </script>
+
+</body>
+
+</html>

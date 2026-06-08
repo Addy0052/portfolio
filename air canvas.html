@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Ultimate Air Draw App 🚀</title>
+
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js"></script>
+
+  <style>
+    #welcomeScreen{
+  position:fixed;
+  inset:0;
+  background:black;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  z-index:9999;
+}
+
+#welcomeScreen .card{
+  width:600px;
+  max-width:90%;
+  padding:30px;
+  border:2px solid gold;
+  border-radius:15px;
+  color:white;
+  text-align:left;
+  font-family:Arial, sans-serif;
+  background:#111;
+  box-shadow:0 0 25px gold;
+}
+
+#welcomeScreen h1{
+  text-align:center;
+  color:gold;
+}
+
+#welcomeScreen ul{
+  line-height:1.8;
+}
+
+#continueBtn{
+  width:100%;
+  padding:15px;
+  margin-top:20px;
+  font-size:18px;
+  background:gold;
+  border:none;
+  border-radius:8px;
+  cursor:pointer;
+  font-weight:bold;
+}
+
+#continueBtn:hover{
+  opacity:0.9;
+}
+    body {
+      margin: 0;
+      background: black;
+      overflow: hidden;
+    }
+
+    video {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 220px;
+      transform: scaleX(-1);
+      border: 2px solid gold;
+      border-radius: 10px;
+      z-index: 10;
+    }
+
+    canvas {
+      position: absolute;
+      transform: scaleX(-1);
+    }
+  </style>
+</head>
+
+<body>
+  <div id="welcomeScreen"> <div class="card"> <h1>🚀 Ultimate Air Draw App</h1>
+
+    <h2>Instructions</h2>
+
+    <ul>
+      <li>✍️ Hold <b>Z</b> to draw in the air.</li>
+      <li>🤏 Pinch thumb and index finger to select a drawing.</li>
+      <li>🖐️ Open your hand to use the duster and erase nearby drawings.</li>
+      <li>🗑️ Hold <b>D</b> and pinch to delete a selected drawing.</li>
+      <li>📦 Pinch and drag to move a selected drawing.</li>
+      <li>⌨️ Press <b>Space</b> to clear everything.</li>
+      <li>📷 Allow camera access when prompted.</li>
+    </ul>
+
+    <button id="continueBtn">Continue</button>
+  </div>
+</div>
+<video id="video" autoplay playsinline></video>
+<canvas id="canvas"></canvas>
+
+<script>
+  document.getElementById("continueBtn").addEventListener("click", () => {
+  document.getElementById("welcomeScreen").style.display = "none";
+});
+const video = document.getElementById("video");
+const canvas = document.getElementById("canvas");
+const ctx = canvas.getContext("2d");
+
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+// drawings
+let drawings = [];
+let current = null;
+
+let drawMode = false;
+let deleteMode = false;
+let grabbed = null;
+
+let prevX = null;
+let prevY = null;
+
+// brush
+function brush() {
+  ctx.shadowColor = "gold";
+  ctx.shadowBlur = 15;
+  ctx.strokeStyle = "gold";
+  ctx.lineWidth = 5;
+  ctx.lineCap = "round";
+}
+
+// keyboard controls
+window.addEventListener("keydown", e => {
+  if (e.key === "z" || e.key === "Z") drawMode = true;
+  if (e.key === "d" || e.key === "D") deleteMode = true;
+
+  if (e.code === "Space") {
+    drawings = [];
+  }
+});
+
+window.addEventListener("keyup", e => {
+  if (e.key === "z" || e.key === "Z") drawMode = false;
+  if (e.key === "d" || e.key === "D") deleteMode = false;
+});
+
+function run(res) {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  // background
+  ctx.fillStyle = "black";
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  // draw all drawings
+  for (let d of drawings) {
+    brush();
+    ctx.beginPath();
+    for (let i = 0; i < d.points.length; i++) {
+      if (i === 0) ctx.moveTo(d.points[i].x, d.points[i].y);
+      else ctx.lineTo(d.points[i].x, d.points[i].y);
+    }
+    ctx.stroke();
+  }
+
+  if (!res.multiHandLandmarks || res.multiHandLandmarks.length === 0) {
+    grabbed = null;
+    current = null;
+    prevX = prevY = null;
+    return;
+  }
+
+  const lm = res.multiHandLandmarks[0];
+
+  // hand skeleton
+  drawConnectors(ctx, lm, HAND_CONNECTIONS, {color:"#555"});
+  drawLandmarks(ctx, lm, {color:"#fff", radius:2});
+
+  const thumb = lm[4];
+  const index = lm[8];
+  const middle = lm[12];
+  const ring = lm[16];
+  const pinky = lm[20];
+
+  const x = index.x * canvas.width;
+  const y = index.y * canvas.height;
+
+  const tx = thumb.x * canvas.width;
+  const ty = thumb.y * canvas.height;
+
+  const pinch = Math.hypot(x - tx, y - ty) < 40;
+
+  const indexUp = index.y < lm[6].y;
+  const middleUp = middle.y < lm[10].y;
+  const ringUp = ring.y < lm[14].y;
+  const pinkyUp = pinky.y < lm[18].y;
+
+  const openHand = indexUp && middleUp && ringUp && pinkyUp;
+
+  // ✋ DUSTER
+  if (openHand) {
+    drawings = drawings.filter(d => {
+      for (let p of d.points) {
+        if (Math.hypot(p.x - x, p.y - y) < 50) {
+          return false;
+        }
+      }
+      return true;
+    });
+
+    ctx.beginPath();
+    ctx.arc(x, y, 40, 0, Math.PI * 2);
+    ctx.strokeStyle = "white";
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    return;
+  }
+
+  // 🤏 PICK
+  if (pinch && !drawMode) {
+    if (!grabbed) {
+      for (let d of drawings) {
+        for (let p of d.points) {
+          if (Math.hypot(p.x - x, p.y - y) < 20) {
+            grabbed = d;
+            break;
+          }
+        }
+      }
+    }
+  } else if (!pinch) {
+    grabbed = null;
+  }
+
+  // 🗑️ DELETE
+  if (pinch && deleteMode && grabbed) {
+    drawings = drawings.filter(d => d !== grabbed);
+    grabbed = null;
+    return;
+  }
+
+  // MOVE (fixed)
+  if (grabbed) {
+    if (prevX !== null && prevY !== null) {
+      const dx = x - prevX;
+      const dy = y - prevY;
+
+      for (let p of grabbed.points) {
+        p.x += dx;
+        p.y += dy;
+      }
+    }
+
+    prevX = x;
+    prevY = y;
+  } else {
+    prevX = null;
+    prevY = null;
+  }
+
+  // DRAW
+  if (drawMode) {
+    if (!current) {
+      current = { points: [] };
+      drawings.push(current);
+    }
+    current.points.push({ x, y });
+  } else {
+    current = null;
+  }
+}
+
+// setup
+const hands = new Hands({
+  locateFile: file => `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}`
+});
+
+hands.setOptions({
+  maxNumHands: 1,
+  modelComplexity: 0,
+  minDetectionConfidence: 0.5,
+  minTrackingConfidence: 0.5
+});
+
+hands.onResults(run);
+
+// camera
+const camera = new Camera(video, {
+  onFrame: async () => {
+    await hands.send({ image: video });
+  },
+  width: 640,
+  height: 480
+});
+
+camera.start();
+</script>
+
+</body>
+</html>
